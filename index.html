@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SofiEduTech - Play & Learn Random Wheel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Petals Container for animations -->
+    <div id="petals-container"></div>
+    
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo-section">
+            <div class="logo-circle">
+                <svg viewBox="0 0 100 100" class="logo-icon">
+                    <circle cx="50" cy="50" r="45" fill="url(#logoGradient)"/>
+                    <path d="M 30 45 Q 50 25 70 45 Q 50 65 30 45" fill="white" opacity="0.9"/>
+                    <circle cx="40" cy="40" r="5" fill="white"/>
+                    <circle cx="60" cy="40" r="5" fill="white"/>
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fc246c;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8e40be;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="logo-text">
+                <h1 class="logo-title">SofiEduTech</h1>
+                <p class="logo-subtitle">Spin Random Wheel! By Mr. Javeed Hassan Sofi</p>
+            </div>
+        </div>
+     </header>
+
+    <!-- Main Title Section -->
+    <div class="title-section">
+        <h1 class="main-title">Spin and Group picker Wheel</h1>
+        <p class="main-subtitle">Randomly pick names using a spinning wheel and instantly create random Student/Teacher groups</p>
+    </div>
+
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="wheel">
+            <span class="mode-icon">🎡</span>
+            Wheel Mode
+        </button>
+        <button class="mode-btn" data-mode="group">
+            <span class="mode-icon">👥</span>
+            Group Mode
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- LEFT SIDE - Wheel Area -->
+        <div class="wheel-section" id="wheelSection">
+            <div class="wheel-container">
+                <canvas id="wheelCanvas" width="600" height="600"></canvas>
+                <div class="wheel-pointer">
+                    <svg viewBox="0 0 40 60">
+                        <path d="M 0 30 L 40 10 L 35 30 L 40 50 Z" fill="#FF6B9D"/>
+                    </svg>
+                </div>
+                <button class="spin-button" id="spinButton">
+                    <span class="spin-text">SPIN</span>
+                    <span class="spin-icon">🎯</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE - Control Panel -->
+        <div class="control-panel">
+            <div class="glass-panel">
+                <h3 class="panel-title">Entries</h3>
+                
+                <div class="entries-count">
+                    <span class="count-label">Total Entries:</span>
+                    <span class="count-number" id="entryCount">0</span>
+                </div>
+
+                <textarea 
+                    id="namesTextarea" 
+                    placeholder="Enter names here... (one name per line)
+Example:
+Sofi Javeed
+Sofi Waseem
+Sajad Akbar
+Reyaz Reshi"
+                    rows="8"
+                ></textarea>
+
+                <div class="upload-section">
+                    <label for="fileUpload" class="upload-label">
+                        <span class="upload-icon">📁</span>
+                        Upload .txt or .csv file
+                    </label>
+                    <input type="file" id="fileUpload" accept=".txt,.csv" hidden>
+                </div>
+
+                <div class="button-grid">
+                    <button class="control-btn primary" id="addNamesBtn">
+                        <span>➕</span> Add Names
+                    </button>
+                    <button class="control-btn" id="shuffleBtn">
+                        <span>🔀</span> Shuffle
+                    </button>
+                    <button class="control-btn" id="clearBtn">
+                        <span>🗑️</span> Clear All
+                    </button>
+                    <button class="control-btn" id="removeWinnerBtn">
+                        <span>❌</span> Remove Selected
+                    </button>
+                    <button class="control-btn" id="saveListBtn">
+                        <span>💾</span> Save List
+                    </button>
+                </div>
+
+                <div class="checkbox-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="keepWinnersCheckbox">
+                        <span class="checkbox-text">Keep winners in the wheel</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Group Mode Section (Hidden by default) -->
+        <div class="group-section" id="groupSection" style="display: none;">
+            <div class="glass-panel">
+                <h3 class="panel-title">Group Maker</h3>
+                
+                <div class="group-config">
+                    <div class="config-item">
+                        <label for="numGroups">Number of Groups:</label>
+                        <input type="number" id="numGroups" min="2" max="20" value="3">
+                    </div>
+                    <div class="config-divider">OR</div>
+                    <div class="config-item">
+                        <label for="groupSize">Group Size:</label>
+                        <input type="number" id="groupSize" min="2" max="20" value="3">
+                    </div>
+                </div>
+
+                <button class="control-btn primary large" id="generateGroupsBtn">
+                    <span>✨</span> Generate Groups
+                </button>
+
+                <div id="groupsDisplay" class="groups-display"></div>
+
+                <div class="button-grid" id="groupActions" style="display: none;">
+                    <button class="control-btn" id="downloadGroupsBtn">
+                        <span>📥</span> Download Groups
+                    </button>
+                    <button class="control-btn" id="copyGroupsBtn">
+                        <span>📋</span> Copy Groups
+                    </button>
+                    <button class="control-btn" id="regenerateBtn">
+                        <span>🔄</span> Regenerate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Winner Modal -->
+    <div class="modal-overlay" id="winnerModal">
+        <div class="winner-card">
+            <div class="confetti-container" id="confettiContainer"></div>
+            <div class="winner-emoji">🎉</div>
+            <h2 class="winner-title">Winner!</h2>
+            <div class="winner-name" id="winnerName"></div>
+            <button class="close-modal-btn" id="closeModalBtn">Continue</button>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="spinSound" loop>
+        <source src="spin1.wav" type="audio/wav">
+    </audio>
+    <audio id="tickSound">
+        <source src="tick.wav" type="audio/wav">
+    </audio>
+    <audio id="applauseSound">
+        <source src="applause.wav" type="audio/wav">
+    </audio>
+    <audio id="successSound">
+        <source src="success.wav" type="audio/wav">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
